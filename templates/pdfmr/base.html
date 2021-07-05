@@ -59,13 +59,16 @@
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
+          {% if user.is_authenticated %}
           <li>
-            <a class="nav-link">ユーザ名：</a>
-        </li>     
-        <li>
-            <a class="nav-link" href="">
-                <i class="fa fa-fw fa-sign-out"></i>ログアウト</a>
-        </li>
+            <a class="nav-link">ユーザ名：{{ user.get_username }}</a>
+          </li>     
+          <li>
+              <a class="nav-link" href="{% url 'accounts:logout' %}">
+                  <i class="fa fa-fw fa-sign-out"></i>ログアウト
+              </a>
+          </li>
+          {% endif %}
         </ul>
       </div>
     </nav>
