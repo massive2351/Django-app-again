@@ -1,3 +1,4 @@
+from .custmize import merge_excel
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
@@ -51,11 +52,13 @@ def create_excel(upload_dir,user_name):
     book = openpyxl.load_workbook(work_file)   #Excelファイルオープン
 
     result_list =[]
+    
     for pdf in file_list:
         """アップロードされたPDFファイルを1つずつ読み込んでText化する。"""
         result_txt = convert_pdf_to_txt(pdf)
         result_list.append(result_txt)
-
-    # merge_excel(book,result_list,work_file) #Excelにデータをセット           
+    #ここから変更
+    merge_excel(book,result_list,work_file) #Excelにデータをセット           
+    #ここまで変更
     #個人ディレクトリへコピー
     shutil.move(work_file, user_dir)
