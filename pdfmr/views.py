@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .utils import create_excel   
 
 from django.views import generic  # FormViewを利用するため
 from django.contrib.auth.mixins import LoginRequiredMixin   # ログオンユーザのみアクセス可とするために利用する
@@ -17,12 +18,14 @@ class UploadView(LoginRequiredMixin, generic.FormView):
 
     def form_valid(self, form):
         user_name = self.request.user.username  #ログオンユーザ名の取得
-        user_dir = os.path.join(settings.MEDIA_ROOT, "excel", user_name)   #ユーザディレクトリパスの生成
+        user_dir = settings.MEDIA_ROOT + "\\excel\\" + user_name   #ユーザディレクトリパスの生成
         if not os.path.isdir(user_dir):  #ユーザディレクトリの作成
             os.makedirs(user_dir)
         temp_dir = form.save()  # upload一時フォルダの取得
-        # pdf -> PDF⇒excel変換処理の実行（あとで実装）
-        #shutil.rmtree(temp_dir)  #upload一時フォルダの削除
+        #ここから変更
+        create_excel(temp_dir, user_name)  #PDF->Excelデータ生成
+        #ここまで変更
+        shutil.rmtree(temp_dir)  #upload一時フォルダの削除
         _, file_list = default_storage.listdir(os.path.join(settings.MEDIA_ROOT, "excel", user_name))
         message = "正常終了しました。"
         context = {
