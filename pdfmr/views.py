@@ -38,3 +38,19 @@ class UploadView(LoginRequiredMixin, generic.FormView):
 
     def form_invalid(self, form):
         return render(self.request, 'pdfmr/upload_form.html', {'form': form})
+        
+        
+class ListView(LoginRequiredMixin, generic.TemplateView):
+    
+    template_name = 'pdfmr/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)  #承継元のメソッドを呼び出す
+        """自分が作成したExcelファイルだけを一覧表示"""
+        login_user_name = self.request.user.username
+        file_list = default_storage.listdir(os.path.join(settings.MEDIA_ROOT, "excel", login_user_name))[1]
+        context = {
+            'file_list': file_list,
+            'login_user_name':login_user_name,
+            }
+        return context
