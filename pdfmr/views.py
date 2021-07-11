@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .utils import create_excel   
-
+from django.contrib.auth.decorators import login_required #追加
 from django.views import generic  # FormViewを利用するため
 from django.contrib.auth.mixins import LoginRequiredMixin   # ログオンユーザのみアクセス可とするために利用する
 from django.conf import settings  # settings.pyの定義内容を利用するため
@@ -54,3 +54,27 @@ class ListView(LoginRequiredMixin, generic.TemplateView):
             'login_user_name':login_user_name,
             }
         return context
+        
+        
+@login_required    
+def dell_file(request):
+    checks_value = request.POST.getlist('checks') #CheckBox＝Onのファイル名を取得
+    login_user_name = request.user.username   #ログオンユーザ名を取得
+    
+    #Excelファイルの格納パスを取得
+    if checks_value:
+        for file in checks_value:
+            path = os.path.join(settings.MEDIA_ROOT, "excel", login_user_name, file)
+            default_storage.delete(path)    #CheckBox=ONのファイルをサーバから削除
+        return render(request, 'pdfmr/delete.html', {'checks_value': checks_value})
+    else:
+        login_user_name = request.user.username
+        file_list = default_storage.listdir(os.path.join(settings.MEDIA_ROOT, "excel", login_user_name))[1]
+        warning_message = "削除対象ファイルが選択されていません。"
+        
+        context = { 
+            'file_list': file_list,
+            'login_user_name':login_user_name,
+            'warning_message': warning_message,
+        }
+        return render(request, 'pdfmr/list.html',context)
