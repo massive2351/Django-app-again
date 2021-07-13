@@ -1,6 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.core.files.storage import default_storage
+from upload_validator import FileTypeValidator
 import os, random, string
 
 
@@ -9,8 +10,9 @@ class UploadForm(forms.Form):
        saveメソッドはアップロードしたPDFを一時フォルダに保存する。
     """
     document = forms.FileField(label="PDFアップロード",
-        widget=forms.ClearableFileInput(attrs={'multiple': True}), 
-        )
+        widget=forms.ClearableFileInput(attrs={'multiple': True}),
+        validators=[FileTypeValidator(allowed_types=[ 'application/pdf'])])
+        
 
 
     def save(self):

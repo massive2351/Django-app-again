@@ -32,6 +32,11 @@
             </div>
             <button type="submit" class="btn btn-sm btn-primary">アップロード</button>    
           </form>
+          {% if form.errors %}<hr>
+          <div class="alert alert-danger alert-dismissible" role="alert">
+              <p>ファイルの種類を確認してください。<br>PDFファイル以外はアップロードできません。</p>
+          </div>
+          {% endif %}
         </div>
       </div>
     </div>
