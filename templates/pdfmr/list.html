@@ -29,24 +29,23 @@
                   <input type="checkbox" name="all" onClick="AllChecked();" />全て選択
                 </label><br>
                 <!--ここまでを新規追加 -->
-                
-                
-                
                      
                 {% for file in file_list %}
                 <label> 
                   <input type="checkbox" name="checks" value="{{file}}" onClick="DisChecked();" />
-                  <a href="http://127.0.0.1:8000/media/excel/{{login_user_name}}/{{file}}">{{file}}</a>
+                  <a href="https://d31a7c5396db49fb87094a6ee0b5fa93.vfs.cloud9.ap-northeast-1.amazonaws.com/media/excel/{{login_user_name}}/{{file}}">{{file}}</a>
                 </label>
                 <br> 
                 {% endfor %}
                 <input type="submit" id="button" name="button"  class="btn btn-sm btn-danger" value="削除">
               </form>
+              
               {% if warning_message %}
               <hr>
               <div class="alert alert-warning alert-dismissible" role="alert">
                 <p>{{warning_message}}</p>
               </div>
+              
               {% endif %}
               <hr>
               <div class="text-center">
