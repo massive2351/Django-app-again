@@ -86,3 +86,5 @@ def dell_file(request):
             'warning_message': warning_message,
         }
         return render(request, 'pdfmr/list.html',context)
+        
+        
