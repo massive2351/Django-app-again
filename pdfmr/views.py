@@ -48,6 +48,14 @@ class ListView(LoginRequiredMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)  #承継元のメソッドを呼び出す
         """自分が作成したExcelファイルだけを一覧表示"""
         login_user_name = self.request.user.username
+        
+        if not default_storage.exists(os.path.join(settings.MEDIA_ROOT, "excel", login_user_name)):
+            warning_message = "このユーザでは一度もファイル作成が行われていません。"
+            context = {
+                'warning_message':warning_message,
+                }
+            return context
+        
         file_list = default_storage.listdir(os.path.join(settings.MEDIA_ROOT, "excel", login_user_name))[1]
         context = {
             'file_list': file_list,
